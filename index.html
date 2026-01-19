@@ -3,453 +3,1225 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Emprendedor | Fashion Store</title>
+    <title>BO Emprendedores | Mini Tiendas y Moda</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400;500;700&family=Montserrat:wght@600;800&display=swap" rel="stylesheet">
     
-    <!-- Fuentes Google Fonts para estilo Moderno/Lujo -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-
     <style>
-        /* --- VARIABLES & RESET --- */
+        /* --- VARIABLES --- */
         :root {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --text-main: #e0e0e0;
-            --text-muted: #a0a0a0;
-            --accent: #d4af37; /* Dorado */
-            --accent-hover: #b5952f;
-            --border: #333;
-            --font-heading: 'Playfair Display', serif;
-            --font-body: 'Lato', sans-serif;
+            --primary-blue: #0A192F;
+            --secondary-blue: #112240;
+            --accent-gold: #FFD700;
+            --accent-orange: #FF6B6B;
+            --accent-green: #2ECC71;
+            --text-dark: #333333;
+            --text-light: #8892b0;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.15);
+            --modal-bg: rgba(10, 25, 47, 0.95);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: var(--font-body);
-            line-height: 1.6;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Roboto', sans-serif; 
+            background-color: #f4f7f6; 
+            color: var(--text-dark); 
+            padding-bottom: 2rem; 
+            overflow-x: hidden;
         }
-
-        /* --- UI COMPONENTS --- */
-        button {
-            cursor: pointer;
-            padding: 0.8rem 1.5rem;
-            border: none;
-            font-family: var(--font-body);
-            font-weight: 700;
+        
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+        
+        /* --- UTILIDADES --- */
+        .hidden { display: none !important; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        .btn { 
+            padding: 15px 35px; 
+            border-radius: 50px; 
+            border: none; 
+            font-weight: 700; 
+            cursor: pointer; 
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 10px; 
+            font-size: 1rem; 
+            transition: all 0.2s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
-            transition: all 0.3s ease;
-            border-radius: 2px;
         }
+        
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        .btn:active { transform: translateY(-1px); }
+        
+        .btn-gold { background: linear-gradient(45deg, #FFD700, #FFC107); color: var(--primary-blue); box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4); }
+        .btn-outline-white { background: transparent; border: 2px solid var(--white); color: var(--white); }
+        .btn-outline-white:hover { background: var(--white); color: var(--primary-blue); }
+        
+        .btn-orange { background-color: var(--accent-orange); color: white; }
+        .btn-green { background-color: var(--accent-green); color: white; }
+        .btn-blue { background-color: var(--primary-blue); color: white; }
+        .btn-red { background-color: #e74c3c; color: white; }
+        
+        /* Estilos para botones pequeños del panel */
+        .btn-sm { padding: 8px 15px; font-size: 0.75rem; border-radius: 15px; width: 100%; margin-top: 5px; }
+        .btn-action-save { background-color: var(--accent-green) !important; }
 
-        .btn-gold { background-color: var(--accent); color: #000; }
-        .btn-gold:hover { background-color: var(--accent-hover); transform: translateY(-2px); }
-
-        .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
-        .btn-outline:hover { background: var(--accent); color: #000; }
-
-        .btn-whatsapp { background-color: #25D366; color: white; width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
-        .btn-whatsapp:hover { background-color: #1ebc57; }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            background-color: #2a2a2a;
-            border: 1px solid var(--border);
-            color: white;
-            font-family: var(--font-body);
-            border-radius: 2px;
-        }
-        input:focus, textarea:focus { border-color: var(--accent); }
-
-        .hidden { display: none !important; }
-
-        /* --- HEADER --- */
-        header {
-            background-color: rgba(18, 18, 18, 0.95);
-            padding: 1rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            backdrop-filter: blur(10px);
-        }
-
-        .logo {
-            font-family: var(--font-heading);
-            font-size: 1.8rem;
-            color: white;
-            text-decoration: none;
-            letter-spacing: 2px;
-        }
-        .logo span { color: var(--accent); }
-
-        nav ul { display: flex; list-style: none; gap: 2rem; }
-        nav a { color: var(--text-main); text-decoration: none; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: color 0.3s; }
-        nav a:hover { color: var(--accent); }
-
-        /* --- HERO SECTION (MODERNA) --- */
-        .hero {
-            height: 90vh;
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=2070&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
+        /* --- SISTEMA DE TOAST NOTIFICATIONS --- */
+        #toast-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3000;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 1rem;
-            border-bottom: 1px solid var(--accent);
+            gap: 10px;
+            pointer-events: none; /* Allows clicking through */
         }
 
-        .hero h1 {
-            font-family: var(--font-heading);
-            font-size: 4rem;
-            margin-bottom: 1rem;
+        .toast {
+            background: rgba(10, 25, 47, 0.95);
             color: white;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.8);
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            color: var(--text-main);
-            margin-bottom: 3rem;
-            max-width: 700px;
-            font-weight: 300;
-        }
-
-        /* --- MENU CATALOGO --- */
-        .catalog-menu {
-            padding: 5rem 2rem;
-            text-align: center;
-            background-color: var(--bg-color);
-        }
-
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            max-width: 1000px;
-            margin: 3rem auto;
-        }
-
-        .menu-card {
-            background: var(--card-bg);
-            padding: 3rem 2rem;
-            border: 1px solid var(--border);
-            transition: 0.4s;
-            cursor: pointer;
-        }
-        .menu-card:hover { border-color: var(--accent); transform: translateY(-5px); }
-        .menu-card h3 { font-family: var(--font-heading); font-size: 1.8rem; margin-bottom: 1rem; color: var(--accent); }
-
-        /* --- SHOP SECTION & FILTERS --- */
-        .shop-container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
-        
-        .filters-bar {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-bottom: 3rem;
-            padding-bottom: 2rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .filter-btn {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            padding: 0.5rem 1.5rem;
+            padding: 12px 24px;
             border-radius: 50px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .filter-btn:hover, .filter-btn.active {
-            border-color: var(--accent);
-            color: var(--accent);
-            background: rgba(212, 175, 55, 0.1);
-        }
-
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 3rem; }
-        
-        .product-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
-            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            font-size: 0.9rem;
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            animation: slideUpFade 0.4s ease forwards;
+            min-width: 300px;
+            justify-content: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            pointer-events: auto;
         }
-        .product-card:hover { border-color: var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+
+        .toast.success { border-left: 5px solid var(--accent-green); }
+        .toast.error { border-left: 5px solid var(--accent-orange); }
+        .toast.info { border-left: 5px solid var(--primary-blue); }
+
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+
+        /* --- MODAL PERSONALIZADO (Reemplazo de Prompt) --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--modal-bg);
+            z-index: 2500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
         
-        .prod-img-wrap { position: relative; width: 100%; height: 350px; overflow: hidden; }
-        .prod-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
-        .product-card:hover .prod-img { transform: scale(1.05); }
+        .modal-content {
+            background: white;
+            width: 90%; max-width: 400px;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .modal-overlay.active .modal-content { transform: scale(1); }
         
-        .prod-badge {
-            position: absolute; top: 10px; left: 10px;
-            background: rgba(0,0,0,0.7); color: var(--accent);
-            padding: 5px 10px; font-size: 0.8rem; text-transform: uppercase;
-            border: 1px solid var(--accent);
-        }
+        .modal-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--primary-blue); margin-bottom: 1.5rem; text-align: center; }
 
-        .prod-info { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
-        .prod-seller { font-size: 0.8rem; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 0.5rem; }
-        .prod-title { font-family: var(--font-heading); font-size: 1.4rem; margin-bottom: 0.5rem; color: white; }
-        .prod-price { font-size: 1.2rem; color: var(--accent); font-weight: bold; margin-bottom: 1.5rem; margin-top: auto; }
-
-        /* --- MINI TIENDA PERSONALIZADA --- */
-        .store-banner {
-            width: 100%;
-            height: 250px;
-            background-color: #333;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-        .store-profile-area {
-            text-align: center;
-            margin-top: -60px;
-            margin-bottom: 2rem;
-            position: relative;
-            z-index: 10;
-        }
-        .store-avatar {
-            width: 120px; height: 120px;
-            border-radius: 50%;
-            border: 4px solid var(--bg-color);
-            object-fit: cover;
-            background: #000;
-        }
-        .store-name { font-family: var(--font-heading); font-size: 2.5rem; color: white; margin-top: 0.5rem; }
-        .store-desc { color: var(--text-muted); max-width: 600px; margin: 0.5rem auto; }
-
-        /* --- DASHBOARDS & FORMS --- */
-        .dashboard { max-width: 800px; margin: 4rem auto; padding: 2rem; background: var(--card-bg); border: 1px solid var(--border); }
-        .dashboard h2 { font-family: var(--font-heading); color: var(--accent); margin-bottom: 2rem; text-align: center; }
-        .form-section { border-bottom: 1px solid var(--border); padding-bottom: 2rem; margin-bottom: 2rem; }
-        .form-section h3 { color: white; margin-bottom: 1rem; }
+        /* --- HEADER & NAVEGACIÓN RESPONSIVE --- */
+        header { background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 1rem 0; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .navbar { display: flex; justify-content: space-between; align-items: center; position: relative; }
         
-        /* --- MODALS --- */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; }
-        .modal-content { background: var(--card-bg); padding: 2rem; max-width: 500px; width: 90%; border: 1px solid var(--border); position: relative; }
-        .close-btn { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+        .logo { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.5rem; color: var(--primary-blue); display: flex; align-items: center; gap: 10px; }
+        .logo span { color: var(--accent-orange); }
 
-        /* --- FOOTER --- */
-        footer { background-color: #000; color: var(--text-muted); padding: 3rem 2rem; text-align: center; border-top: 1px solid var(--border); }
-        .footer-contact { margin-top: 1rem; color: var(--accent); font-size: 1.2rem; }
+        .nav-links { display: flex; gap: 25px; align-items: center; }
+        .nav-item { cursor: pointer; font-weight: 500; color: var(--primary-blue); font-size: 0.95rem; }
+        .nav-item:hover { color: var(--accent-orange); }
 
-        /* --- TOAST --- */
-        .toast { position: fixed; bottom: 20px; right: 20px; background: var(--accent); color: #000; padding: 1rem 2rem; border-radius: 2px; font-weight: bold; transform: translateY(100px); transition: 0.3s; z-index: 2000; }
-        .toast.show { transform: translateY(0); }
+        .hamburger { display: none; cursor: pointer; background: none; border: none; padding: 10px; }
+        .hamburger svg { width: 30px; height: 30px; stroke: var(--primary-blue); stroke-width: 2; }
+
+        @media (max-width: 768px) {
+            .hamburger { display: block; }
+            .nav-links {
+                display: none; position: absolute; top: 100%; left: 0; width: 100%;
+                background-color: white; flex-direction: column; align-items: center; padding: 20px 0;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1); gap: 20px; z-index: 999;
+                animation: slideDown 0.3s ease;
+            }
+            .nav-links.active { display: flex; }
+        }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- VISTA HOME --- */
+        #view-home { padding: 0 !important; min-height: 90vh; display: flex; align-items: center; justify-content: center; background-image: url('https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=2058'); background-size: cover; background-position: center; position: relative; }
+        #view-home::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(10,25,47,0.9) 0%, rgba(10,25,47,0.7) 100%); }
+        
+        .hero-content { position: relative; z-index: 2; text-align: center; max-width: 900px; padding: 50px 30px; background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .hero-title { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--white); margin-bottom: 1.5rem; line-height: 1.1; }
+        .hero-subtitle { font-size: 1.2rem; color: rgba(255,255,255,0.9); margin-bottom: 2.5rem; font-weight: 300; line-height: 1.6; }
+        
+        .trust-badges { display: flex; justify-content: center; gap: 15px; margin-bottom: 3rem; flex-wrap: wrap; }
+        .badge { display: flex; align-items: center; gap: 8px; color: var(--accent-gold); font-size: 0.85rem; font-weight: 500; background: rgba(0,0,0,0.4); padding: 8px 18px; border-radius: 30px; border: 1px solid rgba(255,215,0,0.2); }
+        .hero-buttons { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+
+        /* --- VISTA MINI TIENDAS (LISTADO) --- */
+        .stores-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; margin-top: 2rem; }
+        .store-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.08); transition: 0.3s; position: relative; text-align: center; padding-bottom: 20px; }
+        .store-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.15); }
+        .store-cover { width: 100%; height: 150px; object-fit: cover; display: block; }
+        .store-logo-container { width: 80px; height: 80px; margin: -40px auto 10px; position: relative; z-index: 2; border-radius: 50%; border: 4px solid white; overflow: hidden; background: #eee; }
+        .store-logo { width: 100%; height: 100%; object-fit: cover; }
+        .store-info { padding: 0 20px; }
+        .store-name { font-size: 1.3rem; font-weight: 800; color: var(--primary-blue); margin-bottom: 5px; }
+        .store-seller { color: var(--text-light); font-size: 0.9rem; margin-bottom: 5px; }
+        .store-loc { display: inline-block; background: #eee; padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; color: #555; margin-bottom: 15px; }
+
+        /* --- OTRAS VISTAS --- */
+        .view-section { padding: 4rem 0; min-height: 80vh; animation: snapIn 0.2s ease forwards; }
+        @keyframes snapIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .login-card { background: white; padding: 3rem; border-radius: 20px; box-shadow: var(--shadow); max-width: 450px; margin: 0 auto; text-align: center; }
+        .form-group { margin-bottom: 1.5rem; text-align: left; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: bold; color: var(--primary-blue); font-size: 0.85rem; text-transform: uppercase; }
+        .form-control { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 8px; font-size: 1rem; transition: 0.3s; }
+        .form-control:focus { border-color: var(--primary-blue); outline: none; }
+
+        .table-input { width: 60px; padding: 4px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.85rem; text-align: center; }
+
+        /* Vendedor Dashboard */
+        .seller-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+        .seller-card { background: white; padding: 2rem; border-radius: 20px; box-shadow: var(--shadow); margin-bottom: 20px; }
+        .seller-full { grid-column: 1 / -1; }
+        @media(max-width: 900px) { .seller-grid { grid-template-columns: 1fr; } }
+
+        /* Configuración de Tienda */
+        .store-config-form { border: 2px dashed #ddd; padding: 25px; border-radius: 15px; background: #fafafa; }
+        .img-uploads-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        .file-upload-wrapper { position: relative; overflow: hidden; display: inline-block; width: 100%; }
+        .file-upload-wrapper input[type=file] { font-size: 100px; position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; }
+        .file-upload-btn { border: 2px dashed #ccc; color: #555; background: #f9f9f9; padding: 20px; border-radius: 8px; width: 100%; text-align: center; cursor: pointer; transition: 0.2s; }
+        .file-upload-btn:hover { border-color: var(--primary-blue); color: var(--primary-blue); }
+        
+        .preview-box { width: 100%; margin-top: 10px; border-radius: 8px; overflow: hidden; display: none; border: 1px solid #eee; text-align: center; }
+        .preview-box img { max-width: 100%; display: block; margin: 0 auto; }
+        .preview-cover { height: 100px; object-fit: cover; }
+        .preview-logo { height: 100px; object-fit: cover; border-radius: 50%; width: 100px; }
+        .product-preview-img { width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-top: 15px; display: none; border: 1px solid #eee; }
+
+        /* Catalog View */
+        .catalog-header { margin-bottom: 2rem; background: white; padding: 2rem; border-radius: 20px; box-shadow: var(--shadow); }
+        .filters-row { display: flex; gap: 15px; flex-wrap: wrap; align-items: center; margin-bottom: 1.5rem; }
+        .filter-select, .search-box { padding: 12px; border-radius: 8px; border: 1px solid #ddd; font-size: 1rem; flex: 1; }
+        
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 30px; }
+        .product-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; display: flex; flex-direction: column; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+        .product-img { width: 100%; height: 260px; object-fit: cover; }
+        .product-info { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
+        .product-tag { font-size: 0.75rem; background: var(--primary-blue); color: white; padding: 4px 10px; border-radius: 4px; display: inline-block; margin-bottom: 10px; align-self: flex-start; font-weight: bold; }
+        .product-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 5px; color: var(--text-dark); }
+        .product-price { color: var(--primary-blue); font-weight: 800; font-size: 1.4rem; margin: 10px 0; }
+        .card-actions { margin-top: auto; display: flex; gap: 10px; }
+        .card-actions button { flex: 1; padding: 10px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; color: white; transition: 0.2s; }
+
+        /* Indicador de guardado automático */
+        .autosave-indicator {
+            font-size: 0.7rem;
+            color: var(--accent-green);
+            opacity: 0;
+            transition: opacity 0.3s;
+            margin-top: 5px;
+            text-align: right;
+        }
+        .autosave-indicator.visible { opacity: 1; }
+
     </style>
 </head>
 <body>
 
-    <!-- NOTIFICACIÓN -->
-    <div id="toast" class="toast">Acción realizada</div>
+    <!-- Contenedor de Notificaciones -->
+    <div id="toast-container"></div>
 
-    <!-- HEADER -->
+    <!-- Modal Genérico -->
+    <div id="custom-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 class="modal-title" id="modal-title">Título</h3>
+            <div id="modal-body">
+                <!-- Contenido dinámico -->
+            </div>
+            <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center;">
+                <button class="btn btn-blue btn-sm" id="modal-confirm-btn">Aceptar</button>
+                <button class="btn btn-red btn-sm" onclick="closeModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
     <header>
-        <a href="#" class="logo" onclick="app.navigate('home')">GLOBAL <span>EMPRENDEDOR</span></a>
-        <nav>
-            <ul id="nav-links">
-                <!-- Links dinámicos -->
-            </ul>
-        </nav>
+        <div class="container navbar">
+            <div class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"></path></svg>
+                BO <span>Emprendedores</span>
+            </div>
+
+            <button class="hamburger" onclick="toggleMenu()" aria-label="Menú">
+                <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+
+            <nav>
+                <ul class="nav-links" id="nav-links-list">
+                    <li class="nav-item" onclick="showView('home'); toggleMenu()" style="color: var(--primary-blue);">Inicio</li>
+                    <li class="nav-item" onclick="showView('catalog'); toggleMenu()">Explora todo</li> 
+                    <li class="nav-item" onclick="showView('stores'); toggleMenu()">Mini Tienda</li>
+                    <li class="nav-item" id="nav-access" onclick="showView('login'); toggleMenu()">Acceso</li>
+                    <li class="nav-item hidden" id="nav-seller" onclick="showView('seller'); toggleMenu()">Mi Panel</li>
+                    <li class="nav-item hidden" id="nav-admin" onclick="showView('admin'); toggleMenu()">Admin</li>
+                    <li class="nav-item hidden" id="nav-logout" onclick="logout()" style="color: #e74c3c;">Salir</li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
-    <!-- MAIN CONTENT -->
-    <main id="app-container">
-
-        <!-- VISTA: INICIO (BIENVENIDA) -->
-        <section id="view-home" class="view">
-            <div class="hero">
-                <h1>EL MUNDO DE LOS EMPRENDEDORES</h1>
-                <p>Descubre la moda exclusiva de los mejores talentos bolivianos. Elegancia, estilo y calidad en un solo lugar.</p>
-                <button class="btn-gold" onclick="app.scrollToMenu()">Ver Colecciones</button>
-                <div style="margin-top: 2rem; font-size: 1.1rem;">
-                    ¿Quieres vender con nosotros? <a href="tel:61348083" style="color: var(--accent);">61348083</a>
-                </div>
-            </div>
-
-            <div id="catalog-menu" class="catalog-menu">
-                <h2 style="font-family: var(--font-heading); font-size: 2.5rem; margin-bottom: 0.5rem;">ELIGE TU EXPERIENCIA</h2>
-                <div class="menu-grid">
-                    <div class="menu-card" onclick="app.viewAllProducts()">
-                        <h3>Explorar Todo</h3>
-                        <p>Navega por todo el inventario de todos los vendedores.</p>
-                    </div>
-                    <div class="menu-card" onclick="app.viewSellersList()">
-                        <h3>Mini Tiendas</h3>
-                        <p>Entra a las boutiques personalizadas de cada vendedor.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- VISTA: TIENDA (CATÁLOGO) -->
-        <section id="view-shop" class="view hidden">
-            <div class="shop-container">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                    <button class="btn-outline" onclick="app.scrollToMenu()">← Volver</button>
-                    <h2 id="shop-title" style="font-family: var(--font-heading); color: white;">CATÁLOGO</h2>
-                </div>
-
-                <!-- BOTONES OPCIONALES DE DEPARTAMENTO -->
-                <div class="filters-bar" id="department-filters">
-                    <button class="filter-btn active" onclick="app.filterByDept('all', this)">Todos</button>
-                    <button class="filter-btn" onclick="app.filterByDept('La Paz', this)">La Paz</button>
-                    <button class="filter-btn" onclick="app.filterByDept('Santa Cruz', this)">Santa Cruz</button>
-                    <button class="filter-btn" onclick="app.filterByDept('Cochabamba', this)">Cochabamba</button>
-                    <button class="filter-btn" onclick="app.filterByDept('Oruro', this)">Oruro</button>
-                    <button class="filter-btn" onclick="app.filterByDept('Potosí', this)">Potosí</button>
-                </div>
-
-                <div id="product-list" class="product-grid"></div>
-            </div>
-        </section>
-
-        <!-- VISTA: MINI TIENDA DEL VENDEDOR -->
-        <section id="view-storefront" class="view hidden">
-            <div id="store-customization"></div> <!-- Banner y Avatar inyectados aquí -->
-            <div class="shop-container">
-                <button class="btn-outline" onclick="app.viewSellersList()">← Volver a Tiendas</button>
-                <div class="product-grid" id="store-product-list" style="margin-top: 2rem;"></div>
-            </div>
-        </section>
-
-        <!-- VISTA: LISTA DE VENDEDORES -->
-        <section id="view-sellers" class="view hidden">
-            <div class="shop-container">
-                <div style="text-align: center; margin-bottom: 3rem;">
-                    <button class="btn-outline" onclick="app.scrollToMenu()">← Volver</button>
-                    <h2 style="font-family: var(--font-heading); margin-top: 1rem;">NUESTROS EMPRENDEDORES</h2>
-                </div>
-                <div id="sellers-list-grid" class="product-grid"></div>
-            </div>
-        </section>
-
-        <!-- VISTA: LOGIN -->
-        <section id="view-login" class="view hidden">
-            <div class="dashboard">
-                <h2>Acceso Emprendedor</h2>
-                <form id="login-form">
-                    <input type="text" id="login-user" placeholder="Usuario" required>
-                    <input type="password" id="login-pass" placeholder="Contraseña" required>
-                    <button type="submit" class="btn-gold" style="width: 100%;">Entrar</button>
-                </form>
-            </div>
-        </section>
-
-        <!-- VISTA: PANEL VENDEDOR (DISEÑAR TIENDA) -->
-        <section id="view-seller" class="view hidden">
-            <div class="dashboard">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 2rem;">
-                    <h2>Panel de Control</h2>
-                    <button class="btn-outline" onclick="app.logout()">Cerrar Sesión</button>
-                </div>
-
-                <!-- EDITAR TIENDA -->
-                <div class="form-section">
-                    <h3>Diseñar Mi Tienda</h3>
-                    <form id="edit-store-form">
-                        <label>Nombre de la Tienda</label>
-                        <input type="text" id="store-name-edit" placeholder="Ej: Moda Elegante">
-                        
-                        <label>Descripción</label>
-                        <textarea id="store-desc-edit" rows="2" placeholder="Breve descripción de tu marca..."></textarea>
-                        
-                        <label>Teléfono / WhatsApp (Con código país, ej: 59161348083)</label>
-                        <input type="tel" id="store-wa-edit" placeholder="Ej: 59161348083" required>
-                        
-                        <label>URL Foto de Perfil</label>
-                        <input type="url" id="store-pic-edit" placeholder="https://...">
-                        
-                        <label>URL Banner (Imagen de fondo)</label>
-                        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-                            <input type="url" id="store-banner-edit" placeholder="https://...">
-                            <button type="button" class="btn-outline" onclick="app.fillRandomBanner()">Random</button>
-                        </div>
-
-                        <button type="submit" class="btn-gold">Guardar Cambios de Tienda</button>
-                    </form>
-                </div>
-
-                <!-- AGREGAR PRODUCTO -->
-                <div class="form-section">
-                    <h3>Agregar Ropa</h3>
-                    <form id="add-product-form">
-                        <div style="display: flex; gap: 1rem;">
-                            <input type="text" id="prod-name" placeholder="Nombre del producto" required style="flex:2;">
-                            <input type="number" id="prod-price" placeholder="Precio Bs." required style="flex:1;">
-                        </div>
-                        
-                        <label>Departamento</label>
-                        <select id="prod-dept">
-                            <option value="La Paz">La Paz</option>
-                            <option value="Santa Cruz">Santa Cruz</option>
-                            <option value="Cochabamba">Cochabamba</option>
-                            <option value="Oruro">Oruro</option>
-                            <option value="Potosí">Potosí</option>
-                        </select>
-
-                        <label>URL Imagen Producto</label>
-                        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-                            <input type="url" id="prod-img" placeholder="https://..." required>
-                            <button type="button" class="btn-outline" onclick="app.fillRandomProd()">Random</button>
-                        </div>
-
-                        <textarea id="prod-desc" placeholder="Descripción..." rows="2" required></textarea>
-                        <button type="submit" class="btn-outline" style="width: 100%;">Publicar Producto</button>
-                    </form>
-                </div>
-            </div>
-        </section>
-
-        <!-- VISTA: ADMIN -->
-        <section id="view-admin" class="view hidden">
-            <div class="dashboard">
-                <h2>Administración</h2>
-                <button class="btn-outline" onclick="app.logout()" style="margin-bottom: 2rem;">Salir</button>
+    <main>
+        
+        <!-- 1. HOME -->
+        <section id="view-home" class="view-section">
+            <div class="hero-content">
+                <h1 class="hero-title">Tu Estilo, Tu Negocio</h1>
+                <p class="hero-subtitle">Conectando a los mejores emprendedores de moda con clientes en todo Bolivia. Crea tu mini tienda o explora miles de opciones.</p>
                 
-                <form id="admin-form" class="form-section">
-                    <h3>Gestión de Vendedores</h3>
-                    <input type="text" id="admin-user" placeholder="Usuario Vendedor" required>
-                    <input type="password" id="admin-pass" placeholder="Contraseña" required>
-                    <button type="submit" class="btn-gold">Crear Vendedor</button>
-                </form>
-                <div id="admin-list"></div>
+                <div class="trust-badges">
+                    <div class="badge">🛡️ Confianza</div>
+                    <div class="badge">🚚 Envíos Rápidos</div>
+                    <div class="badge">⭐ Soporte 24/7</div>
+                    <div class="badge">💾 Guardado Automático</div>
+                </div>
+
+                <div class="hero-buttons">
+                    <button class="btn btn-gold" onclick="showView('catalog')">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        Explora todo
+                    </button>
+                    
+                    <button class="btn btn-outline-white" onclick="showView('stores')">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                        Mini Tienda
+                    </button>
+                </div>
             </div>
+        </section>
+
+        <!-- 2. MINI TIENDA (LISTADO) -->
+        <section id="view-stores" class="view-section hidden container">
+            <div class="catalog-header">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                    <h2 style="font-family:'Playfair Display', serif; color: var(--primary-blue);">Mini Tiendas</h2>
+                </div>
+                
+                <div class="filters-row">
+                    <select id="store-dept-filter" class="filter-select" onchange="renderStoresList()">
+                        <option value="all">🇧🇴 Todo Bolivia</option>
+                        <option value="La Paz">La Paz</option>
+                        <option value="Santa Cruz">Santa Cruz</option>
+                        <option value="Cochabamba">Cochabamba</option>
+                        <option value="Oruro">Oruro</option>
+                        <option value="Potosí">Potosí</option>
+                        <option value="Chuquisaca">Sucre</option>
+                        <option value="Tarija">Tarija</option>
+                        <option value="Beni">Beni</option>
+                        <option value="Pando">Pando</option>
+                    </select>
+                </div>
+            </div>
+            <div class="stores-grid" id="stores-list-grid">
+                <!-- JS -->
+            </div>
+        </section>
+
+        <!-- 3. LOGIN -->
+        <section id="view-login" class="view-section hidden container">
+            <div class="login-card">
+                <h2 style="margin-bottom: 1.5rem; color: var(--primary-blue); font-family: 'Playfair Display', serif;">Acceso a Plataforma</h2>
+                <div class="form-group">
+                    <label>Usuario</label>
+                    <input type="text" id="login-user" class="form-control" placeholder="admin o vendedor">
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="login-pass" class="form-control" placeholder="******">
+                </div>
+                <button class="btn btn-blue" style="width: 100%;" onclick="login()">Ingresar</button>
+                <p style="margin-top: 1.5rem; font-size: 0.85rem; color: #777;">Demo: Admin=1234, Vendedor=1234</p>
+            </div>
+        </section>
+
+        <!-- 4. ADMIN -->
+        <section id="view-admin" class="view-section hidden container">
+            <div class="seller-card" style="text-align: center;">
+                <h2 style="font-family:'Playfair Display', serif; margin-bottom: 1.5rem;">Gestión de Vendedores</h2>
+                <button class="btn btn-green" onclick="openAddUserModal()">+ Crear Nuevo Vendedor</button>
+                
+                <div style="margin-top: 2rem; overflow-x: auto;">
+                    <table style="width:100%; border-collapse:collapse; text-align: left;">
+                        <thead><tr style="background:var(--primary-blue); color:white;"><th style="padding:15px;">Usuario</th><th>Rol</th><th>Tienda</th><th>Teléfono</th><th>Acción</th></tr></thead>
+                        <tbody id="users-list-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. VENDEDOR (Panel Completo) -->
+        <section id="view-seller" class="view-section hidden container">
+            <h2 style="margin-bottom: 2rem; color: var(--primary-blue); font-family:'Playfair Display', serif;">Bienvenido, <span id="seller-name-display"></span></h2>
+            
+            <div class="seller-grid">
+                <!-- Columna Izquierda: Configuraciones -->
+                <div>
+                    
+                    <!-- 1. PERFIL PERSONAL -->
+                    <div class="seller-card" style="border-left: 5px solid var(--accent-orange);">
+                        <h3 style="margin-bottom: 1rem;">👤 Mi Perfil</h3>
+                        <div class="form-group">
+                            <label>Nombre Completo</label>
+                            <input type="text" id="profile-fullname" class="form-control input-draft" placeholder="Ej: Juan Pérez">
+                        </div>
+                        <div class="form-group">
+                            <label>Número WhatsApp</label>
+                            <input type="text" id="profile-phone" class="form-control input-draft" placeholder="Ej: 71234567">
+                        </div>
+                        <button id="btn-save-profile" class="btn btn-orange btn-sm" onclick="saveSellerProfile()">Guardar Perfil</button>
+                    </div>
+
+                    <!-- 2. CONFIGURAR MINI TIENDA -->
+                    <div class="seller-card" style="margin-top:20px; border-left: 5px solid var(--accent-gold);">
+                        <h3 style="margin-bottom: 1rem;">🏪 Configurar Mi Mini Tienda</h3>
+                        <p style="font-size:0.85rem; color:#666; margin-bottom:15px;">Define cómo se verá tu tienda en el público.</p>
+                        
+                        <div class="form-group">
+                            <label>Nombre de la Tienda</label>
+                            <input type="text" id="store-name-input" class="form-control input-draft" placeholder="Ej: Modas de Carla">
+                        </div>
+
+                        <div class="form-group">
+                            <label>📍 Ubicación de la Tienda</label>
+                            <select id="store-dept-input" class="form-control input-draft">
+                                <option value="La Paz">La Paz</option>
+                                <option value="Santa Cruz">Santa Cruz</option>
+                                <option value="Cochabamba">Cochabamba</option>
+                                <option value="Oruro">Oruro</option>
+                                <option value="Potosí">Potosí</option>
+                                <option value="Chuquisaca">Sucre</option>
+                                <option value="Tarija">Tarija</option>
+                                <option value="Beni">Beni</option>
+                                <option value="Pando">Pando</option>
+                            </select>
+                        </div>
+
+                        <div class="img-uploads-grid">
+                            <div class="form-group">
+                                <label>Logo (Cuadrado)</label>
+                                <div class="file-upload-wrapper">
+                                    <div class="file-upload-btn" onclick="document.getElementById('store-logo-input').click()">
+                                        📷 Subir Logo
+                                    </div>
+                                    <input type="file" id="store-logo-input" accept="image/*" onchange="previewStoreLogo(event)">
+                                </div>
+                                <div class="preview-box" id="preview-box-logo">
+                                    <img src="" class="preview-logo">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Portada (Ancha)</label>
+                                <div class="file-upload-wrapper">
+                                    <div class="file-upload-btn" onclick="document.getElementById('store-cover-input').click()">
+                                        📷 Subir Portada
+                                    </div>
+                                    <input type="file" id="store-cover-input" accept="image/*" onchange="previewStoreCover(event)">
+                                </div>
+                                <div class="preview-box" id="preview-box-cover">
+                                    <img src="" class="preview-cover">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- BOTÓN INTELIGENTE DE TIENDA -->
+                        <button id="btn-save-store" class="btn btn-blue btn-sm" style="width:100%; margin-top:15px;" onclick="saveStoreConfig()">Guardar Datos de Tienda</button>
+                    </div>
+
+                    <!-- 3. AGREGAR PRODUCTO -->
+                    <div class="seller-card" style="margin-top:20px;">
+                        <h3 style="margin-bottom: 1.5rem; border-bottom: 1px solid #eee; padding-bottom: 10px;">📦 Publicar Nueva Prenda</h3>
+                        
+                        <div class="form-group">
+                            <label>Nombre de la Ropa</label>
+                            <input type="text" id="prod-name" class="form-control input-draft" placeholder="Ej: Vestido de Verano Floral">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Categoría</label>
+                            <select id="prod-cat" class="form-control input-draft">
+                                <option value="">-- Seleccionar --</option>
+                                <option value="Camisa">👔 Camisa</option>
+                                <option value="Polera / Camiseta">👕 Polera / Camiseta</option>
+                                <option value="Gorra">🧢 Gorra</option>
+                                <option value="Pantalón">👖 Pantalón</option>
+                                <option value="Short">🩳 Short</option>
+                                <option value="Vestido">👗 Vestido</option>
+                                <option value="Chaqueta">🧥 Chaqueta</option>
+                                <option value="Bufanda">🧣 Bufanda</option>
+                                <option value="Zapatos">👞 Zapatos</option>
+                                <option value="Zapatillas">👟 Zapatillas</option>
+                                <option value="Sandalias">👡 Sandalias</option>
+                                <option value="Medias / Calcetines">🧦 Medias / Calcetines</option>
+                                <option value="Cinturón">🪢 Cinturón</option>
+                                <option value="Otros">Otros</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>📍 Departamento</label>
+                            <select id="prod-dept" class="form-control input-draft">
+                                <option value="La Paz">La Paz</option>
+                                <option value="Santa Cruz">Santa Cruz</option>
+                                <option value="Cochabamba">Cochabamba</option>
+                                <option value="Oruro">Oruro</option>
+                                <option value="Potosí">Potosí</option>
+                                <option value="Chuquisaca">Sucre</option>
+                                <option value="Tarija">Tarija</option>
+                                <option value="Beni">Beni</option>
+                                <option value="Pando">Pando</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" style="display:flex; gap:15px;">
+                            <div style="flex:1;">
+                                <label>Precio (Bs)</label>
+                                <input type="number" id="prod-price" class="form-control input-draft" placeholder="0.00">
+                            </div>
+                            <div style="flex:1;">
+                                <label>Stock</label>
+                                <input type="number" id="prod-stock" class="form-control input-draft" placeholder="1">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Descripción</label>
+                            <textarea id="prod-desc" class="form-control input-draft" rows="3" placeholder="Detalles, talla, material..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Imagen del Producto</label>
+                            <div class="file-upload-wrapper">
+                                <div class="file-upload-btn" onclick="document.getElementById('prod-img-input').click()">
+                                    📷 Elegir Foto
+                                </div>
+                                <input type="file" id="prod-img-input" accept="image/*" onchange="previewProductImage(event)">
+                            </div>
+                            <img id="prod-img-preview" class="product-preview-img" alt="Vista previa producto">
+                        </div>
+                        
+                        <!-- BOTÓN INTELIGENTE DE PUBLICAR -->
+                        <button id="btn-add-product" class="btn btn-blue" style="width:100%" onclick="addProduct()">Publicar en Mi Mini Tienda</button>
+                        <div id="prod-autosave" class="autosave-indicator">Borrador guardado...</div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Inventario -->
+                <div style="display:flex; flex-direction:column; gap:25px;">
+                    <div class="seller-card" style="padding: 1.5rem; background: #e3f2fd; border: 1px solid #bbdefb;">
+                        <h4 style="color: var(--primary-blue);">💡 Tip</h4>
+                        <p style="font-size:0.9rem; color:#555;">El sistema guarda tus cambios automáticamente. Si cierras la página por error, tus datos escritos se restaurarán al volver.</p>
+                    </div>
+
+                    <div class="seller-card" style="flex-grow:1; padding: 1.5rem; overflow-y: auto; max-height: 500px;">
+                        <h4 style="margin-bottom: 15px;">📋 Inventario Actual</h4>
+                        <div id="my-products-list"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. CATÁLOGO (EXPLORA TODO) -->
+        <section id="view-catalog" class="view-section hidden container">
+            <div class="catalog-header">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                    <h2 id="catalog-title" style="font-family:'Playfair Display', serif; color: var(--primary-blue);">Explora todo</h2>
+                    <span id="catalog-subtitle" style="color:#888; font-size:0.9rem;">Buscando en todo Bolivia</span>
+                </div>
+                
+                <div class="filters-row">
+                    <select id="dept-filter" class="filter-select" onchange="filterProducts()">
+                        <option value="all">🇧🇴 Todo Bolivia</option>
+                        <option value="La Paz">La Paz</option>
+                        <option value="Santa Cruz">Santa Cruz</option>
+                        <option value="Cochabamba">Cochabamba</option>
+                        <option value="Oruro">Oruro</option>
+                        <option value="Potosí">Potosí</option>
+                        <option value="Chuquisaca">Sucre</option>
+                        <option value="Tarija">Tarija</option>
+                        <option value="Beni">Beni</option>
+                        <option value="Pando">Pando</option>
+                    </select>
+                    <input type="text" id="search-input" class="search-box" placeholder="🔍 Buscar prenda..." onkeyup="filterProducts()">
+                </div>
+            </div>
+
+            <div class="product-grid" id="catalog-grid"></div>
         </section>
 
     </main>
 
-    <footer>
-        <h3>GLOBAL EMPRENDEDOR</h3>
-        <p>Conectando moda y oportunidades en Bolivia.</p>
-        <div class="footer-contact">📞 61348083</div>
-    </footer>
-
-    <!-- JAVASCRIPT LOGIC -->
     <script>
-        // DATOS INICIALES MEJORADOS
-        const DEFAULT_SELLERS = [
+        // --- SISTEMA DE NOTIFICACIONES (TOAST) ---
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            let icon = type === 'success' ? '✅' : (type === 'error' ? '⚠️' : 'ℹ️');
+            
+            toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
+            
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'fadeOut 0.4s ease forwards';
+                toast.addEventListener('animationend', () => {
+                    toast.remove();
+                });
+            }, 3000);
+        }
+
+        // --- SISTEMA DE MODAL (Sin prompts nativos) ---
+        const modal = document.getElementById('custom-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+        const modalConfirmBtn = document.getElementById('modal-confirm-btn');
+
+        function openModal(title, htmlContent, onConfirm) {
+            modalTitle.innerText = title;
+            modalBody.innerHTML = htmlContent;
+            modal.classList.add('active');
+            
+            // Limpiar eventos anteriores del botón confirmar
+            const newBtn = modalConfirmBtn.cloneNode(true);
+            modalConfirmBtn.parentNode.replaceChild(newBtn, modalConfirmBtn);
+            
+            newBtn.addEventListener('click', () => {
+                if(onConfirm()) closeModal();
+            });
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+        }
+
+        function openAddUserModal() {
+            const html = `
+                <div class="form-group">
+                    <label>Usuario</label>
+                    <input type="text" id="new-user-u" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="text" id="new-user-p" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <input type="text" id="new-user-ph" class="form-control">
+                </div>
+            `;
+            openModal("Nuevo Vendedor", html, () => {
+                const u = document.getElementById('new-user-u').value;
+                const p = document.getElementById('new-user-p').value;
+                const ph = document.getElementById('new-user-ph').value;
+                
+                if(!u || !p || !ph) {
+                    showToast("Todos los campos son obligatorios", "error");
+                    return false;
+                }
+
+                if(users.find(x => x.user === u)) {
+                    showToast("El usuario ya existe", "error");
+                    return false;
+                }
+
+                users.push({
+                    user:u, pass:p, role:'vendedor', phone:ph, 
+                    storeName:'', storeLogo:'', storeCover:'',
+                    fullname: u, storeDept: 'La Paz'
+                });
+                saveData();
+                renderUsers();
+                showToast("Vendedor creado con éxito");
+                return true;
+            });
+        }
+
+        // --- UTILIDAD DE COMPRESIÓN DE IMÁGENES ---
+        // Esto es crucial para que el guardado sea rápido y no falle por límite de memoria
+        function resizeAndCompressImage(file, maxWidth, maxHeight, callback) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (event) => {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = () => {
+                    let width = img.width;
+                    let height = img.height;
+                    
+                    // Calcular ratio
+                    if (width > height) {
+                        if (width > maxWidth) {
+                            height *= maxWidth / width;
+                            width = maxWidth;
+                        }
+                    } else {
+                        if (height > maxHeight) {
+                            width *= maxHeight / height;
+                            height = maxHeight;
+                        }
+                    }
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // Exportar con calidad 0.7 para ahorrar espacio
+                    callback(canvas.toDataURL('image/jpeg', 0.7));
+                };
+            };
+        }
+
+        // --- SISTEMA DE AUTOSAVE (BORRADORES) ---
+        function setupAutosave() {
+            const inputs = document.querySelectorAll('.input-draft');
+            inputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    saveDrafts();
+                });
+            });
+        }
+
+        function saveDrafts() {
+            const drafts = {};
+            document.querySelectorAll('.input-draft').forEach(input => {
+                drafts[input.id] = input.value;
+            });
+            localStorage.setItem('bo_drafts', JSON.stringify(drafts));
+            
+            // Mostrar indicador visual solo en productos
+            const indicator = document.getElementById('prod-autosave');
+            if(indicator) {
+                indicator.classList.add('visible');
+                setTimeout(() => indicator.classList.remove('visible'), 1000);
+            }
+        }
+
+        function loadDrafts() {
+            const drafts = JSON.parse(localStorage.getItem('bo_drafts'));
+            if(drafts) {
+                Object.keys(drafts).forEach(id => {
+                    const el = document.getElementById(id);
+                    if(el) el.value = drafts[id];
+                });
+            }
+        }
+
+        // --- EVENTO: Guardar al salir de página ---
+        window.addEventListener('beforeunload', () => {
+            // Guardado de emergencia
+            saveData();
+            saveDrafts();
+        });
+
+        // --- DATOS INICIALES ---
+        const defaultUsers = [
             { 
-                id: 'v1', user: 'juan', pass: '123', 
-                storeName: "Estilo Urbano JP", 
-                storeDesc: "Ropa casual y moderna para el joven de hoy.",
-                whatsapp: "59170012345",
-                profilePic: "https:/
+                user: 'admin', pass: '1234', role: 'admin', phone: '61348083', 
+                storeName: 'Oficial BO', storeLogo: 'https://picsum.photos/seed/logo1/100/100', storeCover: 'https://picsum.photos/seed/cover1/300/150', fullname: 'Administrador',
+                storeDept: 'La Paz'
+            },
+            { 
+                user: 'vendedor', pass: '1234', role: 'vendedor', phone: '71234567', 
+                storeName: 'Modas Juan', storeLogo: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=150', storeCover: 'https://images.unsplash.com/photo-1558171813-4c088753af8f?q=80&w=300', fullname: 'Juan Pérez',
+                storeDept: 'Santa Cruz'
+            }
+        ];
+
+        const defaultProducts = [
+            { id: 1, name: "Blazer Elegante", category: "Chaqueta", price: 250, dept: "La Paz", img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=1936", seller: "vendedor", desc: "Elegancia pura.", sellerPhone: "71234567", stock: 5 },
+            { id: 2, name: "Vestido Floral", category: "Vestido", price: 180, dept: "Santa Cruz", img: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?q=80&w=1887", seller: "vendedor", desc: "Para el verano.", sellerPhone: "71234567", stock: 10 },
+            { id: 3, name: "Zapatillas Urbanas", category: "Zapatillas", price: 300, dept: "Cochabamba", img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=2070", seller: "admin", desc: "Estilo urbano.", sellerPhone: "61348083", stock: 2 }
+        ];
+
+        let users = JSON.parse(localStorage.getItem('bo_users')) || defaultUsers;
+        let products = JSON.parse(localStorage.getItem('bo_products')) || defaultProducts;
+        let currentUser = null;
+        let filterSeller = null; 
+        
+        let tempProdImg = null;
+        let tempStoreLogo = null;
+        let tempStoreCover = null;
+
+        function saveData() {
+            // Sincronizar siempre el usuario actual en el array global antes de guardar
+            if(currentUser) {
+                users = users.map(u => u.user === currentUser.user ? currentUser : u);
+            }
+            localStorage.setItem('bo_users', JSON.stringify(users));
+            localStorage.setItem('bo_products', JSON.stringify(products));
+        }
+
+        // --- FUNCIÓN PARA MENÚ HAMBURGUESA (Responsive) ---
+        function toggleMenu() {
+            const navLinks = document.getElementById('nav-links-list');
+            navLinks.classList.toggle('active');
+        }
+
+        // --- NAVEGACIÓN ---
+        function showView(viewName) {
+            window.scrollTo(0,0);
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById('view-' + viewName);
+            if(target) target.classList.remove('hidden');
+
+            if(viewName === 'catalog') filterProducts();
+            if(viewName === 'admin') renderUsers();
+            if(viewName === 'seller') {
+                loadSellerPanel();
+                setupAutosave(); // Activar autosave solo cuando estemos en el panel
+            }
+            if(viewName === 'stores') renderStoresList();
+        }
+
+        // --- LOGIN & LOGOUT ---
+        function login() {
+            const u = document.getElementById('login-user').value;
+            const p = document.getElementById('login-pass').value;
+            const found = users.find(x => x.user === u && x.pass === p);
+            
+            if(found) {
+                currentUser = JSON.parse(JSON.stringify(found)); // Deep copy para evitar referencias
+                updateNav();
+                showView('seller'); 
+                if(found.role === 'admin') showView('admin');
+                showToast(`Bienvenido de nuevo, ${found.user}`);
+            } else {
+                showToast('Datos incorrectos', 'error');
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            filterSeller = null;
+            updateNav();
+            showView('home');
+            showToast('Sesión cerrada');
+        }
+
+        function updateNav() {
+            const navAccess = document.getElementById('nav-access');
+            const navLogout = document.getElementById('nav-logout');
+            const navAdmin = document.getElementById('nav-admin');
+            const navSeller = document.getElementById('nav-seller');
+
+            if(currentUser) {
+                navAccess.classList.add('hidden');
+                navLogout.classList.remove('hidden');
+                navAdmin.classList.add('hidden');
+                navSeller.classList.add('hidden');
+                
+                if(currentUser.role === 'admin') navAdmin.classList.remove('hidden');
+                if(currentUser.role === 'vendedor') navSeller.classList.remove('hidden');
+            } else {
+                navAccess.classList.remove('hidden');
+                navLogout.classList.add('hidden');
+                navAdmin.classList.add('hidden');
+                navSeller.classList.add('hidden');
+            }
+        }
+
+        // --- VISTA MINI TIENDAS (LISTA) ---
+        function renderStoresList() {
+            const grid = document.getElementById('stores-list-grid');
+            grid.innerHTML = '';
+            const deptFilter = document.getElementById('store-dept-filter').value;
+
+            const sellersWithStore = users.filter(u => u.role === 'vendedor' && u.storeName);
+
+            if(sellersWithStore.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding: 2rem;">Aún no hay tiendas creadas.</p>';
+                return;
+            }
+
+            sellersWithStore.forEach(s => {
+                if(deptFilter !== 'all' && s.storeDept !== deptFilter) return;
+
+                const card = document.createElement('div');
+                card.className = 'store-card';
+                const logo = s.storeLogo || 'https://via.placeholder.com/80?text=Logo';
+                const cover = s.storeCover || 'https://via.placeholder.com/300x150?text=Portada';
+                
+                card.innerHTML = `
+                    <img src="${cover}" class="store-cover">
+                    <div class="store-logo-container">
+                        <img src="${logo}" class="store-logo">
+                    </div>
+                    <div class="store-info">
+                        <h3 class="store-name">${s.storeName}</h3>
+                        <p class="store-seller">Vendedor: ${s.fullname || s.user}</p>
+                        <div class="store-loc">📍 ${s.storeDept || 'Bolivia'}</div>
+                        <button class="btn btn-blue btn-sm" onclick="enterSellerStore('${s.user}')">Ir a Tienda</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function enterSellerStore(username) {
+            filterSeller = username;
+            showView('catalog');
+        }
+
+        // --- PANEL VENDEDOR ---
+        function loadSellerPanel() {
+            document.getElementById('seller-name-display').innerText = currentUser.user || 'Vendedor';
+            
+            // Cargar datos, preferiblemente del localStorage actualizado por si hubo cambios
+            const freshUser = users.find(u => u.user === currentUser.user);
+            if(freshUser) currentUser = freshUser;
+
+            document.getElementById('profile-fullname').value = currentUser.fullname || '';
+            document.getElementById('profile-phone').value = currentUser.phone || '';
+            document.getElementById('store-name-input').value = currentUser.storeName || '';
+            document.getElementById('store-dept-input').value = currentUser.storeDept || 'La Paz';
+            
+            if(currentUser.storeLogo) {
+                const prevLogo = document.querySelector('#preview-box-logo img');
+                prevLogo.src = currentUser.storeLogo;
+                document.getElementById('preview-box-logo').style.display = 'block';
+            }
+            if(currentUser.storeCover) {
+                const prevCover = document.querySelector('#preview-box-cover img');
+                prevCover.src = currentUser.storeCover;
+                document.getElementById('preview-box-cover').style.display = 'block';
+            }
+
+            renderMyProducts();
+            loadDrafts(); // Restaurar posibles borradores
+        }
+
+        function renderMyProducts() {
+            const list = document.getElementById('my-products-list');
+            list.innerHTML = '';
+            const myProds = products.filter(p => p.seller === currentUser.user);
+            
+            if(myProds.length === 0) list.innerHTML = '<p style="color:#999; text-align:center;">Sin productos.</p>';
+            
+            myProds.forEach(p => {
+                const item = document.createElement('div');
+                item.style.cssText = "display:flex; gap:10px; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:10px; flex-direction:column; background:#fff;";
+                item.innerHTML = `
+                    <div style="display:flex; gap:10px; align-items:center;">
+                        <img src="${p.img}" style="width:40px; height:40px; object-fit:cover; border-radius:4px;">
+                        <div style="flex-grow:1;">
+                            <div style="font-weight:bold; font-size:0.9rem;">${p.name}</div>
+                        </div>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:5px; gap:5px;">
+                        <div style="display:flex; gap:5px; align-items:center;">
+                            <label style="font-size:0.75rem; color:#666;">Bs.</label>
+                            <input type="number" id="price-${p.id}" value="${p.price}" class="table-input">
+                            <label style="font-size:0.75rem; color:#666; margin-left:5px;">Stock:</label>
+                            <input type="number" id="stock-${p.id}" value="${p.stock}" class="table-input" style="width:50px;">
+                        </div>
+                        <div style="display:flex; gap:5px;">
+                            <button class="btn-blue btn-sm" onclick="updateProduct(${p.id})">Actualizar</button>
+                            <button class="btn-red btn-sm" onclick="deleteProduct(${p.id})" style="background-color:#e74c3c;">X</button>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function updateProduct(id) {
+            const prod = products.find(p => p.id === id);
+            if(prod) {
+                const newPrice = parseFloat(document.getElementById(`price-${id}`).value);
+                const newStock = parseInt(document.getElementById(`stock-${id}`).value);
+
+                if(isNaN(newPrice) || isNaN(newStock)) return showToast("Valores inválidos", 'error');
+
+                prod.price = newPrice;
+                prod.stock = newStock;
+                saveData();
+                showToast("Producto actualizado correctamente.");
+            }
+        }
+
+        function saveSellerProfile() {
+            const name = document.getElementById('profile-fullname').value;
+            const phone = document.getElementById('profile-phone').value;
+            if(phone.length < 7) return showToast("Teléfono inválido", 'error');
+            
+            const btn = document.getElementById('btn-save-profile');
+            const originalText = btn.innerText;
+            btn.innerText = "Guardando...";
+            
+            setTimeout(() => {
+                currentUser.fullname = name;
+                currentUser.phone = phone;
+                
+                saveData();
+                
+                // Limpiar borrador de perfil
+                const drafts = JSON.parse(localStorage.getItem('bo_drafts')) || {};
+                delete drafts['profile-fullname'];
+                delete drafts['profile-phone'];
+                localStorage.setItem('bo_drafts', JSON.stringify(drafts));
+                
+                btn.innerText = "Guardado √";
+                btn.classList.add('btn-action-save');
+                showToast("Perfil actualizado");
+                
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.classList.remove('btn-action-save');
+                }, 2000);
+            }, 300);
+        }
+
+        function previewStoreLogo(e) {
+            const file = e.target.files[0];
+            if(file) {
+                resizeAndCompressImage(file, 200, 200, (base64) => {
+                    tempStoreLogo = base64;
+                    const prev = document.querySelector('#preview-box-logo img');
+                    prev.src = tempStoreLogo;
+                    document.getElementById('preview-box-logo').style.display = 'block';
+                });
+            }
+        }
+
+        function previewStoreCover(e) {
+            const file = e.target.files[0];
+            if(file) {
+                resizeAndCompressImage(file, 400, 200, (base64) => {
+                    tempStoreCover = base64;
+                    const prev = document.querySelector('#preview-box-cover img');
+                    prev.src = tempStoreCover;
+                    document.getElementById('preview-box-cover').style.display = 'block';
+                });
+            }
+        }
+
+        function saveStoreConfig() {
+            const name = document.getElementById('store-name-input').value;
+            const dept = document.getElementById('store-dept-input').value;
+            if(!name) return showToast("Ponle un nombre a tu tienda", 'error');
+            
+            const btn = document.getElementById('btn-save-store');
+            const originalText = btn.innerText;
+            btn.innerText = "Guardando...";
+
+            setTimeout(() => {
+                currentUser.storeName = name;
+                currentUser.storeDept = dept;
+                if(tempStoreLogo) currentUser.storeLogo = tempStoreLogo;
+                if(tempStoreCover) currentUser.storeCover = tempStoreCover;
+                
+                saveData();
+
+                // Limpiar borradores de tienda
+                const drafts = JSON.parse(localStorage.getItem('bo_drafts')) || {};
+                delete drafts['store-name-input'];
+                delete drafts['store-dept-input'];
+                localStorage.setItem('bo_drafts', JSON.stringify(drafts));
+                
+                btn.innerText = "Guardado √";
+                btn.classList.add('btn-action-save');
+                showToast("¡Mini Tienda configurada!");
+                
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.classList.remove('btn-action-save');
+                }, 2000);
+            }, 300);
+        }
+
+        function previewProductImage(e) {
+            const file = e.target.files[0];
+            if(file) {
+                resizeAndCompressImage(file, 300, 300, (base64) => {
+                    tempProdImg = base64;
+                    document.getElementById('prod-img-preview').src = tempProdImg;
+                    document.getElementById('prod-img-preview').style.display = 'block';
+                });
+            }
+        }
+
+        function addProduct() {
+            const name = document.getElementById('prod-name').value;
+            const price = document.getElementById('prod-price').value;
+            const stock = document.getElementById('prod-stock').value;
+            const cat = document.getElementById('prod-cat').value;
+            const dept = document.getElementById('prod-dept').value;
+            const desc = document.getElementById('prod-desc').value;
+            
+            if(!name || !price) return showToast("Faltan datos obligatorios", 'error');
+
+            const btn = document.getElementById('btn-add-product');
+            const originalText = btn.innerText;
+            btn.innerText = "Publicando...";
+
+            setTimeout(() => {
+                const newProd = {
+                    id: Date.now(),
+                    name, category: cat, price: parseFloat(price), stock: parseInt(stock)||1, desc, dept,
+                    img: tempProdImg || `https://picsum.photos/seed/${Date.now()}/300/300`,
+                    seller: currentUser.user,
+                    sellerPhone: currentUser.phone || "61348083"
+                };
+                
+                products.unshift(newProd);
+                saveData();
+                
+                showToast("¡Producto guardado!");
+                
+                // Limpiar form y borradores
+                document.getElementById('prod-name').value = '';
+                document.getElementById('prod-price').value = '';
+                document.getElementById('prod-stock').value = '';
+                document.getElementById('prod-desc').value = '';
+                document.getElementById('prod-cat').value = '';
+                document.getElementById('prod-img-preview').style.display = 'none';
+                tempProdImg = null;
+                
+                saveDrafts(); // Guardar el estado vacío para limpiar borrador
+                
+                btn.innerText = "Guardado √";
+                btn.classList.add('btn-action-save');
+                
+                // Refrescar lista inmediatamente
+                renderMyProducts();
+
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.classList.remove('btn-action-save');
+                }, 2000);
+            }, 500);
+        }
+
+        function deleteProduct(id) {
+            if(confirm("¿Seguro que quieres borrar este producto?")) {
+                products = products.filter(p => p.id !== id);
+                saveData();
+                showToast("Producto eliminado");
+                renderMyProducts();
+            }
+        }
+
+        // --- CATALOGO (FILTROS) ---
+        function filterProducts() {
+            const dept = document.getElementById('dept-filter').value;
+            const search = document.getElementById('search-input').value.toLowerCase();
+            const grid = document.getElementById('catalog-grid');
+            const title = document.getElementById('catalog-title');
+            const subtitle = document.getElementById('catalog-subtitle');
+
+            grid.innerHTML = '';
+
+            if(filterSeller) {
+                const sellerInfo = users.find(u => u.user === filterSeller);
+                title.innerText = sellerInfo ? sellerInfo.storeName : "Tienda";
+                subtitle.innerText = "Explorando productos de esta tienda";
+            } else {
+                title.innerText = "Explora todo";
+                subtitle.innerText = "Buscando en todo Bolivia";
+            }
+
+            const filtered = products.filter(p => {
+                const matchDept = dept === 'all' || p.dept === dept;
+                const matchSeller = !filterSeller || p.seller === filterSeller;
+                const matchSearch = p.name.toLowerCase().includes(search) || p.category.toLowerCase().includes(search);
+                return matchDept && matchSeller && matchSearch;
+            });
+
+            if(filtered.length === 0) grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center;">Sin resultados.</p>';
+
+            filtered.forEach(p => {
+                const waMsg = `Hola, vi "${p.name}" en BO Emprendedores. ¿Disponible?`;
+                const waLink = `https://wa.me/${p.sellerPhone}?text=${encodeURIComponent(waMsg)}`;
+
+                grid.innerHTML += `
+                    <div class="product-card">
+                        <img src="${p.img}" class="product-img">
+                        <div class="product-info">
+                            <span class="product-tag">${p.dept}</span>
+                            <h3 class="product-title">${p.name}</h3>
+                            <div class="product-price">Bs. ${p.price}</div>
+                            <p style="font-size:0.85rem; color:#666;">${p.desc}</p>
+                            <div class="card-actions">
+                                <button class="btn-blue">Detalle</button>
+                                <button class="btn-green" onclick="window.open('${waLink}', '_blank')">WhatsApp</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // --- ADMIN ---
+        function renderUsers() {
+            const tbody = document.getElementById('users-list-body');
+            tbody.innerHTML = '';
+            users.forEach(u => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${u.user}</td>
+                        <td>${u.role}</td>
+                        <td>${u.storeName || '-'}</td>
+                        <td>${u.phone || '-'}</td>
+                        <td>${u.role !== 'admin' ? `<button class="btn-red btn-sm" onclick="delUser('${u.user}')">Borrar</button>` : ''}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function delUser(u) { 
+            if(confirm("Borrar usuario permanentemente?")) { 
+                users = users.filter(x=>x.user!==u); 
+                saveData(); 
+                renderUsers(); 
+                showToast("Usuario eliminado");
+            } 
+        }
+
+        // Inicialización
+        showView('home');
+    </script>
+</body>
+</html>
